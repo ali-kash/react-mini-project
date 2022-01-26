@@ -7,19 +7,21 @@ import { AiOutlineSearch } from 'react-icons/ai'
 import './styles/styles.scss'
 
 function App() {
-	const [productData, setProductData] = useState([{}])
-	const [searchTerm, setSetSearchTerm] = useState('')
-	const [isLoading, setIsLoading] = useState(true)
+	const [productData, setProductData] = useState([{}]) // empty object
+	const [searchTerm, setSetSearchTerm] = useState('') // empty string
+	const [isLoading, setIsLoading] = useState(true) // wait for frontend and backend to load
 
+	// equal to what is typed in the input
 	const handleChange = (event) => {
 		setSetSearchTerm(event.target.value)
 	}
 
 	useEffect(() => {
 		const fetchData = async () => {
-			const result = await axios('/api')
+			// proxy defined in packages.json, only need '/api'
+			const result = await axios('/api') // wait for response from json
 			// console.log(result.data)
-			setProductData(result.data)
+			setProductData(result.data) // set data to variable
 			setIsLoading(false)
 		}
 
@@ -27,6 +29,11 @@ function App() {
 	}, [])
 
 	return isLoading ? (
+		// alternative
+		// {( typeof productData === 'undefined')} ? (
+		//  <p>Loading ...</p>
+		// )
+
 		<p>Loading ...</p>
 	) : (
 		<div className='container'>
@@ -46,15 +53,11 @@ function App() {
 				{productData &&
 					productData
 						.filter((data) =>
+							// current value includes searchTerm string
 							data.name.toLowerCase().includes(searchTerm.toLowerCase())
 						)
-						.map((data, index) => {
-							return (
-								<Products
-									key={data && data.id ? data.id : index}
-									product={data}
-								/>
-							)
+						.map((data) => {
+							return <Products key={data.id} product={data} />
 						})}
 			</div>
 		</div>
